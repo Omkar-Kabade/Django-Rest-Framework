@@ -10,7 +10,13 @@ class Product(models.Model):
 # adding custom fields in model through serializers
     @property
     def sale_price(self):
-        return "%.2f" %(float(self.price)*0.8)
+        try:
+            return "%.2f" %(float(self.price)*0.8)
+        except:
+            return None
 
     def get_discount(self):
-        return (self.price + 100)
+        try:
+            return (self.price + 100)
+        except:
+            return None
