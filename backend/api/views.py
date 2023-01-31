@@ -8,12 +8,13 @@ from rest_framework.decorators import api_view
 from products.serializers import ProductSerializer
 # Create your views here.
 
-@api_view(['POST','GET'])
+@api_view(['POST'])
 def api_home(request, *args, **kwargs):
     #DRF API VIEW
-    instance = Product.objects.all().order_by("?").first( ) # queries randomly
-    data = {}
-    if instance:
-        #data= model_to_dict(instance,fields=['id','title','content','price']) #this wil directly prints models to dict not need write 25 to 28 lines
-        data = ProductSerializer(instance).data   #this wil directly prints models to dict not need write 25 to 28 lines
-    return Response(data)
+    data = request.data
+    serializer = ProductSerializer(data= request.data)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.save()
+        print(data)
+        return Response(serializer.data)
+    return Response({'Error':'Invalid data'},status = 400)
